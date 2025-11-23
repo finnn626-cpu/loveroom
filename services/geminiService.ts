@@ -2,9 +2,16 @@ import { GoogleGenAI } from "@google/genai";
 import { Message } from '../types';
 
 const getClient = () => {
-  const apiKey = process.env.API_KEY;
+  // 支持多种环境变量获取方式
+  const apiKey = 
+    (typeof process !== 'undefined' && process.env?.API_KEY) || 
+    (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) ||
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) ||
+    (typeof import.meta !== 'undefined' && import.meta.env?.GEMINI_API_KEY) ||
+    '';
+  
   if (!apiKey) {
-    console.error("API_KEY is missing from environment");
+    console.error("API_KEY is missing from environment. Please set GEMINI_API_KEY in .env.local file.");
     return null;
   }
   return new GoogleGenAI({ apiKey });
@@ -58,7 +65,7 @@ export const GeminiService = {
   },
 
   generateLoveNote: async (senderName: string, receiverName: string, tone: string): Promise<string> => {
-     const ai = getClient();
+    const ai = getClient();
     if (!ai) return "AI服务不可用";
 
     try {

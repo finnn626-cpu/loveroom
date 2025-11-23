@@ -10,12 +10,23 @@ const App: React.FC = () => {
 
   // Check for existing session on mount
   useEffect(() => {
-    const savedSession = sessionStorage.getItem('loveroom_session');
-    if (savedSession) {
-      const { user, spaceId } = JSON.parse(savedSession);
-      setCurrentUser(user);
-      setCurrentSpaceId(spaceId);
-      setCurrentView(AppView.SPACE);
+    try {
+      const savedSession = sessionStorage.getItem('loveroom_session');
+      if (savedSession) {
+        try {
+          const { user, spaceId } = JSON.parse(savedSession);
+          if (user && spaceId) {
+            setCurrentUser(user);
+            setCurrentSpaceId(spaceId);
+            setCurrentView(AppView.SPACE);
+          }
+        } catch (error) {
+          console.error('Failed to parse session data:', error);
+          sessionStorage.removeItem('loveroom_session');
+        }
+      }
+    } catch (error) {
+      console.error('Failed to access sessionStorage:', error);
     }
   }, []);
 
@@ -25,11 +36,19 @@ const App: React.FC = () => {
     setCurrentView(AppView.SPACE);
     
     // Save session for refresh
-    sessionStorage.setItem('loveroom_session', JSON.stringify({ user, spaceId }));
+    try {
+      sessionStorage.setItem('loveroom_session', JSON.stringify({ user, spaceId }));
+    } catch (error) {
+      console.error('Failed to save session to sessionStorage:', error);
+    }
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem('loveroom_session');
+    try {
+      sessionStorage.removeItem('loveroom_session');
+    } catch (error) {
+      console.error('Failed to remove session from sessionStorage:', error);
+    }
     setCurrentUser(null);
     setCurrentSpaceId(null);
     setCurrentView(AppView.LANDING);

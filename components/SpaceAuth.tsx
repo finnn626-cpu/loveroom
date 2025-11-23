@@ -53,7 +53,7 @@ export const SpaceAuth: React.FC<SpaceAuthProps> = ({ onJoin }) => {
 
   const handleSuccess = (sid: string) => {
     const user: User = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: Math.random().toString(36).substring(2, 11),
       nickname,
       avatar: avatar || undefined
     };

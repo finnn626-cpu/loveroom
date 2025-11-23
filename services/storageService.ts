@@ -4,7 +4,7 @@ const SPACE_PREFIX = 'loveroom_data_';
 
 export const StorageService = {
   createSpace: (name: string, password: string): Space => {
-    const id = Math.random().toString(36).substr(2, 9);
+    const id = Math.random().toString(36).substring(2, 11);
     const newSpace: SpaceData = {
       id,
       name,
@@ -21,13 +21,22 @@ export const StorageService = {
         }
       ]
     };
-    localStorage.setItem(`${SPACE_PREFIX}${id}`, JSON.stringify(newSpace));
+    try {
+      localStorage.setItem(`${SPACE_PREFIX}${id}`, JSON.stringify(newSpace));
+    } catch (error) {
+      console.error('Failed to save space to localStorage:', error);
+    }
     return { id, name, password, created: newSpace.created };
   },
 
   getSpace: (id: string): SpaceData | null => {
-    const data = localStorage.getItem(`${SPACE_PREFIX}${id}`);
-    return data ? JSON.parse(data) : null;
+    try {
+      const data = localStorage.getItem(`${SPACE_PREFIX}${id}`);
+      return data ? JSON.parse(data) : null;
+    } catch (error) {
+      console.error('Failed to read space from localStorage:', error);
+      return null;
+    }
   },
 
   validateSpace: (id: string, password: string): boolean => {
@@ -39,7 +48,11 @@ export const StorageService = {
     const space = StorageService.getSpace(spaceId);
     if (space) {
       space.messages.push(message);
-      localStorage.setItem(`${SPACE_PREFIX}${spaceId}`, JSON.stringify(space));
+      try {
+        localStorage.setItem(`${SPACE_PREFIX}${spaceId}`, JSON.stringify(space));
+      } catch (error) {
+        console.error('Failed to save message to localStorage:', error);
+      }
       return space.messages;
     }
     return [];
