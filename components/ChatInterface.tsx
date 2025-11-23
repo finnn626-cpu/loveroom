@@ -152,48 +152,49 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ user, spaceId, onL
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 max-w-4xl mx-auto shadow-2xl overflow-hidden relative">
+    <div className="flex flex-col h-screen bg-gray-50 w-full max-w-4xl mx-auto shadow-2xl overflow-hidden relative">
       
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-gray-100 sticky top-0 z-20">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white font-bold text-lg shadow-md">
+      <div className="bg-white/80 backdrop-blur-md px-2 sm:px-4 py-2 sm:py-3 flex items-center justify-between border-b border-gray-100 sticky top-0 z-20">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white font-bold text-sm sm:text-lg shadow-md flex-shrink-0">
             {spaceName.charAt(0).toUpperCase()}
           </div>
-          <div>
-            <h2 className="font-bold text-gray-800 leading-tight">{spaceName}</h2>
+          <div className="min-w-0 flex-1">
+            <h2 className="font-bold text-gray-800 leading-tight text-sm sm:text-base truncate">{spaceName}</h2>
             <div 
               onClick={copySpaceId}
-              className="text-xs text-gray-400 cursor-pointer hover:text-primary flex items-center gap-1"
+              className="text-[10px] sm:text-xs text-gray-400 cursor-pointer hover:text-primary flex items-center gap-1 truncate"
             >
-              空间号: {spaceId} <i className="fas fa-copy"></i>
+              <span className="hidden sm:inline">空间号: </span>
+              <span className="truncate">{spaceId}</span> <i className="fas fa-copy flex-shrink-0"></i>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-           <Button variant="ghost" onClick={onLogout} title="退出">
-            <i className="fas fa-sign-out-alt"></i>
+        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+           <Button variant="ghost" onClick={onLogout} title="退出" className="p-2 sm:px-4 sm:py-2">
+            <i className="fas fa-sign-out-alt text-sm sm:text-base"></i>
           </Button>
         </div>
       </div>
 
       {/* AI Assistant Toolbar */}
-      <div className="bg-purple-50 px-4 py-2 flex items-center justify-between border-b border-purple-100">
-        <span className="text-xs font-semibold text-purple-600 uppercase tracking-wider flex items-center gap-2">
-          <i className="fas fa-sparkles"></i> AI 情感助手
+      <div className="bg-purple-50 px-2 sm:px-4 py-2 flex items-center justify-between border-b border-purple-100 flex-wrap gap-2">
+        <span className="text-[10px] sm:text-xs font-semibold text-purple-600 uppercase tracking-wider flex items-center gap-1 sm:gap-2">
+          <i className="fas fa-sparkles text-xs sm:text-sm"></i> <span className="hidden sm:inline">AI 情感助手</span><span className="sm:hidden">AI</span>
         </span>
-        <div className="flex gap-2">
+        <div className="flex gap-1 sm:gap-2">
            <button 
              onClick={() => triggerAI('topic')}
              disabled={isAiLoading}
-             className="text-xs bg-white text-purple-600 px-3 py-1.5 rounded-full border border-purple-200 hover:bg-purple-100 transition shadow-sm"
+             className="text-[10px] sm:text-xs bg-white text-purple-600 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-purple-200 hover:bg-purple-100 transition shadow-sm whitespace-nowrap"
            >
              话题建议
            </button>
            <button 
              onClick={() => triggerAI('vibe')}
              disabled={isAiLoading}
-             className="text-xs bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-full hover:opacity-90 transition shadow-sm"
+             className="text-[10px] sm:text-xs bg-gradient-to-r from-purple-500 to-pink-500 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full hover:opacity-90 transition shadow-sm whitespace-nowrap"
            >
              氛围分析
            </button>
@@ -202,21 +203,21 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ user, spaceId, onL
 
       {/* AI Response Bubble */}
       {aiResponse && (
-        <div className="p-4 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-pink-100 flex items-start gap-3 relative animate-fadeIn">
-          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm text-purple-500 mt-1">
-             <i className="fas fa-robot"></i>
+        <div className="p-2 sm:p-4 bg-gradient-to-r from-purple-50 to-pink-50 border-b border-pink-100 flex items-start gap-2 sm:gap-3 relative animate-fadeIn">
+          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center shadow-sm text-purple-500 mt-1 flex-shrink-0">
+             <i className="fas fa-robot text-xs sm:text-sm"></i>
           </div>
-          <div className="flex-1">
-            <p className="text-sm text-gray-700 italic">{aiResponse}</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs sm:text-sm text-gray-700 italic break-words">{aiResponse}</p>
           </div>
-          <button onClick={() => setAiResponse(null)} className="text-gray-400 hover:text-gray-600">
-            <i className="fas fa-times"></i>
+          <button onClick={() => setAiResponse(null)} className="text-gray-400 hover:text-gray-600 flex-shrink-0 p-1">
+            <i className="fas fa-times text-xs sm:text-sm"></i>
           </button>
         </div>
       )}
 
       {/* Messages Feed */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-hide bg-cover bg-center" style={{ backgroundImage: 'radial-gradient(#f3e8ff 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
+      <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-4 sm:space-y-6 scrollbar-hide bg-cover bg-center" style={{ backgroundImage: 'radial-gradient(#f3e8ff 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
         {messages.map((msg) => {
           const isMe = msg.senderId === user.id;
           const isSystem = msg.type === 'system';
@@ -237,53 +238,53 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ user, spaceId, onL
               
               {/* Avatar for others */}
               {!isMe && (
-                <div className="w-8 h-8 rounded-full overflow-hidden bg-white border border-gray-100 flex-shrink-0 shadow-sm mb-1">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full overflow-hidden bg-white border border-gray-100 flex-shrink-0 shadow-sm mb-1">
                   {msg.senderAvatar ? (
                     <img src={msg.senderAvatar} alt={msg.senderName} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs font-bold bg-gray-200">
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-[10px] sm:text-xs font-bold bg-gray-200">
                       {msg.senderName[0]}
                     </div>
                   )}
                 </div>
               )}
 
-              <div className={`max-w-[70%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                {!isMe && !msg.senderAvatar && <span className="text-xs text-gray-500 ml-1 mb-1">{msg.senderName}</span>}
+              <div className={`max-w-[85%] sm:max-w-[70%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                {!isMe && !msg.senderAvatar && <span className="text-[10px] sm:text-xs text-gray-500 ml-1 mb-1">{msg.senderName}</span>}
                 
                 {isSticker ? (
                    <div className="transition-transform hover:scale-105 duration-200">
-                      <img src={msg.imageUrl} alt="Sticker" className="w-32 h-32 object-contain drop-shadow-sm" />
+                      <img src={msg.imageUrl} alt="Sticker" className="w-24 h-24 sm:w-32 sm:h-32 object-contain drop-shadow-sm" />
                    </div>
                 ) : (
                   <div 
                     className={`
-                      p-3 rounded-2xl shadow-sm relative overflow-hidden
+                      p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-sm relative overflow-hidden
                       ${isMe 
                         ? 'bg-gradient-to-br from-primary to-pink-600 text-white rounded-br-none' 
                         : 'bg-white text-gray-800 rounded-bl-none border border-gray-100'}
                     `}
                   >
                     {msg.imageUrl && (
-                      <div className="mb-2 rounded-lg overflow-hidden max-h-64">
+                      <div className="mb-2 rounded-lg overflow-hidden max-h-48 sm:max-h-64">
                          <img src={msg.imageUrl} alt="shared" className="w-full h-full object-cover" />
                       </div>
                     )}
-                    <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.content}</p>
+                    <p className="whitespace-pre-wrap text-xs sm:text-sm leading-relaxed break-words">{msg.content}</p>
                   </div>
                 )}
-                <span className="text-[10px] text-gray-400 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-[9px] sm:text-[10px] text-gray-400 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
 
               {/* Avatar for me */}
               {isMe && (
-                <div className="w-8 h-8 rounded-full overflow-hidden bg-pink-50 border border-pink-100 flex-shrink-0 shadow-sm mb-1">
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full overflow-hidden bg-pink-50 border border-pink-100 flex-shrink-0 shadow-sm mb-1">
                   {(msg.senderAvatar || user.avatar) ? (
                     <img src={msg.senderAvatar || user.avatar} alt="Me" className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-primary text-xs font-bold bg-pink-100">
+                    <div className="w-full h-full flex items-center justify-center text-primary text-[10px] sm:text-xs font-bold bg-pink-100">
                       {user.nickname[0]}
                     </div>
                   )}
@@ -296,11 +297,11 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ user, spaceId, onL
       </div>
 
       {/* Input Area */}
-      <div className="bg-white p-3 border-t border-gray-100 relative">
+      <div className="bg-white p-2 sm:p-3 border-t border-gray-100 relative">
         
         {/* 多功能表情面板 */}
         {showPicker && (
-          <div className="absolute bottom-full left-0 mb-2 ml-2 bg-white rounded-2xl shadow-xl border border-gray-100 w-72 z-30 animate-fadeIn flex flex-col overflow-hidden">
+          <div className="absolute bottom-full left-0 mb-2 ml-0 sm:ml-2 bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-100 w-[calc(100vw-1rem)] sm:w-72 max-w-[calc(100vw-1rem)] sm:max-w-72 z-30 animate-fadeIn flex flex-col overflow-hidden">
             {/* 标签切换栏 */}
             <div className="flex border-b border-gray-100">
               <button 
@@ -318,21 +319,21 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ user, spaceId, onL
             </div>
 
             {/* 面板内容 */}
-            <div className="h-64 overflow-y-auto p-3 scrollbar-hide bg-white/50">
+            <div className="h-48 sm:h-64 overflow-y-auto p-2 sm:p-3 scrollbar-hide bg-white/50">
               {pickerTab === 'emoji' ? (
-                <div className="grid grid-cols-6 gap-2">
+                <div className="grid grid-cols-6 sm:grid-cols-6 gap-1 sm:gap-2">
                   {EMOJIS.map((emoji, index) => (
                     <button 
                       key={index} 
                       onClick={() => handleAddEmoji(emoji)}
-                      className="text-2xl hover:bg-gray-100 rounded p-1 transition-colors"
+                      className="text-xl sm:text-2xl hover:bg-gray-100 rounded p-1 transition-colors"
                     >
                       {emoji}
                     </button>
                   ))}
                 </div>
               ) : (
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-1 sm:gap-2">
                   {STICKERS.map((url, index) => (
                     <button 
                       key={index} 
@@ -350,31 +351,31 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ user, spaceId, onL
 
         {selectedImage && (
           <div className="mb-2 relative inline-block">
-             <img src={selectedImage} alt="Preview" className="h-20 w-20 object-cover rounded-lg border border-gray-200" />
+             <img src={selectedImage} alt="Preview" className="h-16 w-16 sm:h-20 sm:w-20 object-cover rounded-lg border border-gray-200" />
              <button 
                 onClick={() => setSelectedImage(null)}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs shadow-md"
+                className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 bg-red-500 text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs shadow-md"
              >
                <i className="fas fa-times"></i>
              </button>
           </div>
         )}
         
-        <div className="flex items-end gap-2 bg-gray-50 p-2 rounded-2xl border border-gray-200 focus-within:border-primary focus-within:ring-1 focus-within:ring-pink-100 transition-all">
+        <div className="flex items-end gap-1 sm:gap-2 bg-gray-50 p-1.5 sm:p-2 rounded-xl sm:rounded-2xl border border-gray-200 focus-within:border-primary focus-within:ring-1 focus-within:ring-pink-100 transition-all">
           <button 
             onClick={() => setShowPicker(!showPicker)}
-            className={`p-2 transition-colors rounded-full hover:bg-white ${showPicker ? 'text-primary' : 'text-gray-400'}`}
+            className={`p-1.5 sm:p-2 transition-colors rounded-full hover:bg-white flex-shrink-0 ${showPicker ? 'text-primary' : 'text-gray-400'}`}
             title="发送表情"
           >
-            <i className="far fa-smile text-lg"></i>
+            <i className="far fa-smile text-base sm:text-lg"></i>
           </button>
 
           <button 
             onClick={() => fileInputRef.current?.click()}
-            className="p-2 text-gray-400 hover:text-primary transition-colors rounded-full hover:bg-white"
+            className="p-1.5 sm:p-2 text-gray-400 hover:text-primary transition-colors rounded-full hover:bg-white flex-shrink-0"
             title="发送图片"
           >
-            <i className="fas fa-image text-lg"></i>
+            <i className="fas fa-image text-base sm:text-lg"></i>
           </button>
 
           <input 
@@ -396,16 +397,16 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ user, spaceId, onL
             }}
             onClick={() => setShowPicker(false)}
             placeholder="说点什么..."
-            className="flex-1 bg-transparent border-none outline-none resize-none py-2 max-h-32 text-sm"
+            className="flex-1 bg-transparent border-none outline-none resize-none py-1.5 sm:py-2 max-h-24 sm:max-h-32 text-xs sm:text-sm"
             rows={1}
-            style={{ minHeight: '40px' }}
+            style={{ minHeight: '36px' }}
           />
           <Button 
             onClick={handleSend} 
             disabled={!inputText.trim() && !selectedImage}
-            className="rounded-xl px-4"
+            className="rounded-xl px-3 sm:px-4 py-1.5 sm:py-2 flex-shrink-0"
           >
-            <i className="fas fa-paper-plane"></i>
+            <i className="fas fa-paper-plane text-sm sm:text-base"></i>
           </Button>
         </div>
       </div>

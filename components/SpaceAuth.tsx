@@ -35,7 +35,17 @@ export const SpaceAuth: React.FC<SpaceAuthProps> = ({ onJoin }) => {
       setError("请填写所有信息");
       return;
     }
-    const space = StorageService.createSpace(spaceName, password);
+    // 去除前后空格
+    const trimmedSpaceName = spaceName.trim();
+    const trimmedPassword = password.trim();
+    const trimmedNickname = nickname.trim();
+    
+    if (!trimmedSpaceName || !trimmedPassword || !trimmedNickname) {
+      setError("所有信息不能为空");
+      return;
+    }
+    
+    const space = StorageService.createSpace(trimmedSpaceName, trimmedPassword);
     handleSuccess(space.id);
   };
 
@@ -44,8 +54,17 @@ export const SpaceAuth: React.FC<SpaceAuthProps> = ({ onJoin }) => {
       setError("请填写所有信息");
       return;
     }
-    if (StorageService.validateSpace(spaceId, password)) {
-      handleSuccess(spaceId);
+    // 去除前后空格
+    const trimmedSpaceId = spaceId.trim();
+    const trimmedPassword = password.trim();
+    
+    if (!trimmedSpaceId || !trimmedPassword) {
+      setError("空间ID和密码不能为空");
+      return;
+    }
+    
+    if (StorageService.validateSpace(trimmedSpaceId, trimmedPassword)) {
+      handleSuccess(trimmedSpaceId);
     } else {
       setError("空间ID或密码错误");
     }
@@ -61,28 +80,28 @@ export const SpaceAuth: React.FC<SpaceAuthProps> = ({ onJoin }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 relative overflow-hidden">
       {/* Decorative Background Elements */}
-      <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-      <div className="absolute bottom-[-10%] left-[-10%] w-64 h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
+      <div className="absolute top-[-10%] right-[-10%] w-48 h-48 sm:w-64 sm:h-64 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-48 h-48 sm:w-64 sm:h-64 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
       
-      <div className="w-full max-w-md bg-white/60 backdrop-blur-lg rounded-3xl shadow-2xl p-8 z-10 border border-white/50">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2">
+      <div className="w-full max-w-md bg-white/60 backdrop-blur-lg rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 z-10 border border-white/50">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent mb-2">
             LOVE ROOM
           </h1>
-          <p className="text-gray-500">只属于你们的私密空间</p>
+          <p className="text-sm sm:text-base text-gray-500">只属于你们的私密空间</p>
         </div>
 
-        <div className="flex bg-gray-100 p-1 rounded-xl mb-6">
+        <div className="flex bg-gray-100 p-1 rounded-lg sm:rounded-xl mb-4 sm:mb-6">
           <button 
-            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${mode === 'create' ? 'bg-white shadow-sm text-primary' : 'text-gray-500'}`}
+            className={`flex-1 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all ${mode === 'create' ? 'bg-white shadow-sm text-primary' : 'text-gray-500'}`}
             onClick={() => { setMode('create'); setError(''); }}
           >
             创建新空间
           </button>
           <button 
-            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${mode === 'join' ? 'bg-white shadow-sm text-primary' : 'text-gray-500'}`}
+            className={`flex-1 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all ${mode === 'join' ? 'bg-white shadow-sm text-primary' : 'text-gray-500'}`}
             onClick={() => { setMode('join'); setError(''); }}
           >
             加入空间
@@ -94,18 +113,18 @@ export const SpaceAuth: React.FC<SpaceAuthProps> = ({ onJoin }) => {
           <div className="flex flex-col items-center gap-2 mb-2">
             <div 
               onClick={() => fileInputRef.current?.click()}
-              className="w-24 h-24 rounded-full bg-white border-4 border-pink-100 shadow-md overflow-hidden flex items-center justify-center cursor-pointer hover:border-pink-300 transition-colors relative group"
+              className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white border-2 sm:border-4 border-pink-100 shadow-md overflow-hidden flex items-center justify-center cursor-pointer hover:border-pink-300 transition-colors relative group"
             >
               {avatar ? (
                 <img src={avatar} alt="Avatar" className="w-full h-full object-cover" />
               ) : (
                 <div className="flex flex-col items-center text-gray-300 group-hover:text-pink-400 transition-colors">
-                  <i className="fas fa-camera text-2xl mb-1"></i>
-                  <span className="text-xs">上传头像</span>
+                  <i className="fas fa-camera text-xl sm:text-2xl mb-0.5 sm:mb-1"></i>
+                  <span className="text-[10px] sm:text-xs">上传头像</span>
                 </div>
               )}
               <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                 <i className="fas fa-pen text-white"></i>
+                 <i className="fas fa-pen text-white text-sm sm:text-base"></i>
               </div>
             </div>
             <input 
@@ -154,10 +173,10 @@ export const SpaceAuth: React.FC<SpaceAuthProps> = ({ onJoin }) => {
             </>
           )}
 
-          {error && <p className="text-red-500 text-sm text-center bg-red-50 py-2 rounded-lg">{error}</p>}
+          {error && <p className="text-red-500 text-xs sm:text-sm text-center bg-red-50 py-2 px-3 rounded-lg break-words">{error}</p>}
 
           <Button 
-            className="w-full py-4 text-lg mt-4" 
+            className="w-full py-3 sm:py-4 text-sm sm:text-base md:text-lg mt-4" 
             onClick={mode === 'create' ? handleCreate : handleJoin}
           >
             {mode === 'create' ? '立即创建' : '进入空间'}

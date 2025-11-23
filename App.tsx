@@ -55,7 +55,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full min-h-screen overflow-x-hidden">
       {currentView === AppView.LANDING && (
         <SpaceAuth onJoin={handleJoinSpace} />
       )}

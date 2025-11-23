@@ -41,7 +41,13 @@ export const StorageService = {
 
   validateSpace: (id: string, password: string): boolean => {
     const space = StorageService.getSpace(id);
-    return space !== null && space.password === password;
+    if (!space) {
+      return false;
+    }
+    // 确保密码匹配（去除空格后比较）
+    const storedPassword = (space.password || '').trim();
+    const inputPassword = (password || '').trim();
+    return storedPassword === inputPassword && storedPassword.length > 0;
   },
 
   addMessage: (spaceId: string, message: Message): Message[] => {
