@@ -59,17 +59,21 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ user, spaceId, onL
   useEffect(() => {
     // Initial load
     loadData();
-    // Poll for changes (simulating realtime for this demo)
+    // Poll for changes (real-time sync across devices)
     const interval = setInterval(loadData, 2000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spaceId]);
 
-  const loadData = () => {
-    const spaceData = StorageService.getSpace(spaceId);
-    if (spaceData) {
-      setMessages(spaceData.messages);
-      setSpaceName(spaceData.name);
+  const loadData = async () => {
+    try {
+      const spaceData = await StorageService.getSpace(spaceId);
+      if (spaceData) {
+        setMessages(spaceData.messages);
+        setSpaceName(spaceData.name);
+      }
+    } catch (error) {
+      console.error('Failed to load data:', error);
     }
   };
 
@@ -77,7 +81,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ user, spaceId, onL
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if ((!inputText.trim() && !selectedImage)) return;
 
     const newMessage: Message = {
@@ -91,14 +95,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ user, spaceId, onL
       type: selectedImage ? 'image_text' : 'text'
     };
 
-    const updatedMessages = StorageService.addMessage(spaceId, newMessage);
-    setMessages(updatedMessages);
-    setInputText('');
-    setSelectedImage(null);
-    setShowPicker(false);
+    try {
+      const updatedMessages = await StorageService.addMessage(spaceId, newMessage);
+      setMessages(updatedMessages);
+      setInputText('');
+      setSelectedImage(null);
+      setShowPicker(false);
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      alert('发送消息失败，请重试');
+    }
   };
 
-  const handleSendSticker = (stickerUrl: string) => {
+  const handleSendSticker = async (stickerUrl: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),
       senderId: user.id,
@@ -109,9 +118,14 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({ user, spaceId, onL
       timestamp: Date.now(),
       type: 'sticker'
     };
-    const updatedMessages = StorageService.addMessage(spaceId, newMessage);
-    setMessages(updatedMessages);
-    setShowPicker(false);
+    try {
+      const updatedMessages = await StorageService.addMessage(spaceId, newMessage);
+      setMessages(updatedMessages);
+      setShowPicker(false);
+    } catch (error) {
+      console.error('Failed to send sticker:', error);
+      alert('发送贴图失败，请重试');
+    }
   };
 
   const handleAddEmoji = (emoji: string) => {

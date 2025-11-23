@@ -30,7 +30,7 @@ export const SpaceAuth: React.FC<SpaceAuthProps> = ({ onJoin }) => {
     }
   };
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     if (!spaceName || !password || !nickname) {
       setError("请填写所有信息");
       return;
@@ -45,11 +45,16 @@ export const SpaceAuth: React.FC<SpaceAuthProps> = ({ onJoin }) => {
       return;
     }
     
-    const space = StorageService.createSpace(trimmedSpaceName, trimmedPassword);
-    handleSuccess(space.id);
+    try {
+      const space = await StorageService.createSpace(trimmedSpaceName, trimmedPassword);
+      handleSuccess(space.id);
+    } catch (error) {
+      console.error('Failed to create space:', error);
+      setError("创建空间失败，请重试");
+    }
   };
 
-  const handleJoin = () => {
+  const handleJoin = async () => {
     if (!spaceId || !password || !nickname) {
       setError("请填写所有信息");
       return;
@@ -63,10 +68,16 @@ export const SpaceAuth: React.FC<SpaceAuthProps> = ({ onJoin }) => {
       return;
     }
     
-    if (StorageService.validateSpace(trimmedSpaceId, trimmedPassword)) {
-      handleSuccess(trimmedSpaceId);
-    } else {
-      setError("空间ID或密码错误");
+    try {
+      const isValid = await StorageService.validateSpace(trimmedSpaceId, trimmedPassword);
+      if (isValid) {
+        handleSuccess(trimmedSpaceId);
+      } else {
+        setError("空间ID或密码错误");
+      }
+    } catch (error) {
+      console.error('Failed to validate space:', error);
+      setError("验证失败，请重试");
     }
   };
 

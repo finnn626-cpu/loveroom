@@ -6,8 +6,8 @@ const getClient = () => {
   const apiKey = 
     (typeof process !== 'undefined' && process.env?.API_KEY) || 
     (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) ||
-    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_GEMINI_API_KEY) ||
-    (typeof import.meta !== 'undefined' && import.meta.env?.GEMINI_API_KEY) ||
+    (typeof import.meta !== 'undefined' && (import.meta.env?.VITE_GEMINI_API_KEY as string)) ||
+    (typeof import.meta !== 'undefined' && (import.meta.env?.GEMINI_API_KEY as string)) ||
     '';
   
   if (!apiKey) {

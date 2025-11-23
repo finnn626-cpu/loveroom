@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
       server: {
         port: 3000,
         host: '0.0.0.0',
+        open: false, // 不自动打开浏览器，让调试器控制
       },
       plugins: [react()],
       define: {
@@ -23,6 +24,9 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      build: {
+        sourcemap: true, // 启用源码映射以便调试
       }
     };
 });
